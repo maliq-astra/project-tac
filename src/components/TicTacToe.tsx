@@ -8,20 +8,8 @@ const TicTacToe: React.FC = () => {
   const [board, setBoard] = useState<Board>(Array(9).fill(null));
   const [playerSymbol, setPlayerSymbol] = useState<Player>('X');
   const [difficulty, setDifficulty] = useState<Difficulty>('easy');
-  const [isMuted, setIsMuted] = useState<boolean>(false);
   const [hoveredCell, setHoveredCell] = useState<number | null>(null);
   const [gameStatus, setGameStatus] = useState<GameStatus>('selecting');
-
-  // Test sound URLs
-  const moveSoundEffect = new Audio("https://www.soundjay.com/button/button-09.mp3");
-  const winSoundEffect = new Audio("https://www.soundjay.com/button/button-35.mp3");
-
-  const playSound = (sound: HTMLAudioElement): void => {
-    if (!isMuted) {
-      sound.currentTime = 0; // Reset sound to start
-      sound.play().catch(error => console.log('Error playing sound:', error));
-    }
-  };
 
   const handleCellClick = (index: number): void => {
     if (board[index] || gameStatus !== 'playing') return;
@@ -29,11 +17,9 @@ const TicTacToe: React.FC = () => {
     const newBoard = [...board];
     newBoard[index] = playerSymbol;
     setBoard(newBoard);
-    playSound(moveSoundEffect);
     
     const winner = checkWinner(newBoard);
     if (winner) {
-      playSound(winSoundEffect);
       setTimeout(() => setGameStatus('ended'), 500);
     } else if (!newBoard.includes(null)) {
       setTimeout(() => setGameStatus('ended'), 500);
@@ -49,11 +35,9 @@ const TicTacToe: React.FC = () => {
     const newBoard = [...currentBoard];
     newBoard[move] = computerSymbol;
     setBoard(newBoard);
-    playSound(moveSoundEffect);
 
     const winner = checkWinner(newBoard);
     if (winner) {
-      playSound(winSoundEffect);
       setTimeout(() => setGameStatus('ended'), 500);
     } else if (!newBoard.includes(null)) {
       setTimeout(() => setGameStatus('ended'), 500);
@@ -152,13 +136,6 @@ const TicTacToe: React.FC = () => {
           </button>
         </div>
       )}
-
-      <button 
-        className="mute-button"
-        onClick={() => setIsMuted(!isMuted)}
-      >
-        {isMuted ? '🔇' : '🔊'}
-      </button>
     </div>
   );
 };

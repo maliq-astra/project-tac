@@ -1,3 +1,8 @@
+/* Add at the top of the file */
+body {
+  font-family: 'Chilanka', cursive;
+}
+
 .game-container {
   display: flex;
   flex-direction: column;
@@ -83,15 +88,20 @@
 .symbol-choice button {
   margin: 10px;
   padding: 10px 30px;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
+  font-weight: bold;
   cursor: pointer;
   border: 2px solid;
   border-radius: 8px;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+  position: relative;
+  font-family: 'Finger Paint', cursive;
 }
 
 .symbol-choice button:hover {
-  filter: brightness(0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .difficulty-choice button {
@@ -103,6 +113,7 @@
   border-radius: 8px;
   background: white;
   transition: all 0.2s ease;
+  font-family: 'Chilanka', cursive;
 }
 
 .difficulty-choice button:hover {
@@ -130,6 +141,7 @@
   transition: all 0.3s ease;
   -webkit-text-stroke: 1px rgba(0,0,0,0.1);
   animation: letterSpacing 0.3s ease;
+  font-family: 'Chilanka', cursive;
 }
 
 .start-button:hover {
@@ -165,7 +177,6 @@
   text-shadow: 0 0 10px rgba(255, 0, 255, 0.5),
                0 0 20px rgba(255, 0, 255, 0.3),
                0 0 30px rgba(255, 0, 255, 0.2);
-  animation: impossibleGlow 1.5s infinite alternate;
 }
 
 /* Button pulse animation */
@@ -203,8 +214,35 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s ease;
+  font-family: 'Chilanka', cursive;
 }
 
 .reset-button:hover {
   background: #1976D2;
+}
+
+.symbol {
+  font-family: 'Finger Paint', cursive;
+  font-size: 3.5rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  transform-style: preserve-3d;
+  transition: all 0.3s ease;
+}
+
+.symbol.preview {
+  opacity: 0.2;
+  text-shadow: none;
+}
+
+.symbol.x {
+  transform: translateZ(10px);
+}
+
+.symbol.o {
+  transform: translateZ(10px);
+}
+
+.cell:hover .symbol {
+  transform: translateZ(20px);
 }

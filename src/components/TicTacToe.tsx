@@ -82,7 +82,20 @@ const TicTacToe: React.FC = () => {
     backgroundColor: isSelected ? theme.primary : 'white',
     color: isSelected ? 'white' : theme.primary,
     borderColor: theme.primary,
+    textShadow: isSelected ? '0 2px 4px rgba(0,0,0,0.2)' : 'none',
+    transform: isSelected ? 'translateY(-2px)' : 'none',
+    transition: 'all 0.3s ease',
   });
+
+  const getCellContent = (cell: Player | null, index: number) => {
+    if (cell) {
+      return <span className={`symbol ${cell.toLowerCase()}`} style={{ color: theme.primary }}>{cell}</span>;
+    }
+    if (hoveredCell === index && gameStatus === 'playing') {
+      return <span className={`symbol ${playerSymbol.toLowerCase()} preview`}>{playerSymbol}</span>;
+    }
+    return '';
+  };
 
   return (
     <div className="game-container" style={containerStyle}>
@@ -125,7 +138,7 @@ const TicTacToe: React.FC = () => {
               onMouseLeave={() => setHoveredCell(null)}
               onClick={() => handleCellClick(index)}
             >
-              {cell || (hoveredCell === index && !cell && gameStatus === 'playing' ? playerSymbol : '')}
+              {getCellContent(cell, index)}
             </div>
           ))}
         </div>

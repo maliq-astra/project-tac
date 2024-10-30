@@ -1,6 +1,6 @@
 /* Add at the top of the file */
 body {
-  font-family: 'Chilanka', cursive;
+  font-family: 'Comic Neue', cursive;
 }
 
 .game-container {
@@ -113,7 +113,7 @@ body {
   border-radius: 8px;
   background: white;
   transition: all 0.2s ease;
-  font-family: 'Chilanka', cursive;
+  font-family: 'Comic Neue', cursive;
 }
 
 .difficulty-choice button:hover {
@@ -141,7 +141,7 @@ body {
   transition: all 0.3s ease;
   -webkit-text-stroke: 1px rgba(0,0,0,0.1);
   animation: letterSpacing 0.3s ease;
-  font-family: 'Chilanka', cursive;
+  font-family: 'Comic Neue', cursive;
 }
 
 .start-button:hover {
@@ -214,7 +214,7 @@ body {
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s ease;
-  font-family: 'Chilanka', cursive;
+  font-family: 'Comic Neue', cursive;
 }
 
 .reset-button:hover {

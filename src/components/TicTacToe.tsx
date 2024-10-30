@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './TicTacToe.css';
-import { Player, Board, GameStatus, Difficulty } from '../types/game';
+import DifficultyPicker from './DifficultyPicker';
+import { Player, Board, GameStatus, Difficulty, difficultyThemes } from '../types/game';
 import { checkWinner, getComputerMove } from '../utils/gameLogic';
 
 const TicTacToe: React.FC = () => {
@@ -64,41 +65,51 @@ const TicTacToe: React.FC = () => {
     setGameStatus('selecting');
   };
 
+  // Add theme styles to the container
+  const containerStyle = {
+    backgroundColor: difficultyThemes[difficulty].background,
+    transition: 'background-color 0.3s ease',
+  };
+
+  const theme = difficultyThemes[difficulty];
+
+  const startButtonStyle = {
+    backgroundColor: theme.primary,
+    color: 'white',
+  };
+
+  const symbolButtonStyle = (isSelected: boolean) => ({
+    backgroundColor: isSelected ? theme.primary : 'white',
+    color: isSelected ? 'white' : theme.primary,
+    borderColor: theme.primary,
+  });
+
   return (
-    <div className="game-container">
+    <div className="game-container" style={containerStyle}>
       {gameStatus === 'selecting' && (
         <div className="game-setup">
           <h2>Choose Your Symbol</h2>
           <div className="symbol-choice">
             <button 
-              className={playerSymbol === 'X' ? 'selected' : ''} 
+              style={symbolButtonStyle(playerSymbol === 'X')}
               onClick={() => setPlayerSymbol('X')}
             >X</button>
             <button 
-              className={playerSymbol === 'O' ? 'selected' : ''} 
+              style={symbolButtonStyle(playerSymbol === 'O')}
               onClick={() => setPlayerSymbol('O')}
             >O</button>
           </div>
+          
           <h2>Select Difficulty</h2>
-          <div className="difficulty-choice">
-            <button 
-              className={difficulty === 'easy' ? 'selected' : ''} 
-              onClick={() => setDifficulty('easy')}
-            >Easy</button>
-            <button 
-              className={difficulty === 'medium' ? 'selected' : ''} 
-              onClick={() => setDifficulty('medium')}
-            >Medium</button>
-            <button 
-              className={difficulty === 'hard' ? 'selected' : ''} 
-              onClick={() => setDifficulty('hard')}
-            >Hard</button>
-            <button 
-              className={difficulty === 'impossible' ? 'selected' : ''} 
-              onClick={() => setDifficulty('impossible')}
-            >Impossible</button>
-          </div>
-          <button className="start-button" onClick={() => setGameStatus('playing')}>
+          <DifficultyPicker 
+            difficulty={difficulty}
+            setDifficulty={setDifficulty}
+          />
+          
+          <button 
+            className={`start-button ${difficulty}`}
+            onClick={() => setGameStatus('playing')}
+          >
             Start Game
           </button>
         </div>

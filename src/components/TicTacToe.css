@@ -4,7 +4,8 @@
   align-items: center;
   padding: 2rem;
   min-height: 100vh;
-  background-color: #f0f2f5;
+  background-color: var(--theme-background);
+  transition: background-color 0.3s ease;
 }
 
 .game-board {
@@ -29,13 +30,13 @@
   position: relative;
   transform-style: preserve-3d;
   transition: transform 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px var(--theme-shadow);
   border-radius: 8px;
 }
 
 .cell:hover {
   transform: translateZ(20px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 16px var(--theme-shadow);
 }
 
 .cell::before {
@@ -63,7 +64,7 @@
   background: #fff;
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px var(--theme-shadow);
   transition: transform 0.2s ease;
 }
 
@@ -79,7 +80,20 @@
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.symbol-choice button,
+.symbol-choice button {
+  margin: 10px;
+  padding: 10px 30px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border: 2px solid;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.symbol-choice button:hover {
+  filter: brightness(0.9);
+}
+
 .difficulty-choice button {
   margin: 10px;
   padding: 10px 30px;
@@ -91,32 +105,88 @@
   transition: all 0.2s ease;
 }
 
-.symbol-choice button:hover,
 .difficulty-choice button:hover {
   background: #f0f0f0;
 }
 
-.symbol-choice button.selected,
-.difficulty-choice button.selected {
-  background: #4CAF50;
+.difficulty-choice button[data-difficulty="impossible"] {
+  background: linear-gradient(45deg, #ff0000, #ff00ff);
   color: white;
-  border-color: #4CAF50;
+  text-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+.difficulty-choice button[data-difficulty="impossible"]:hover {
+  background: linear-gradient(45deg, #ff00ff, #ff0000);
 }
 
 .start-button {
-  margin-top: 20px;
-  padding: 12px 40px;
-  font-size: 1.2rem;
-  background: #4CAF50;
-  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
   border: none;
   border-radius: 8px;
+  padding: 10px 20px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.3s ease;
+  -webkit-text-stroke: 1px rgba(0,0,0,0.1);
+  animation: letterSpacing 0.3s ease;
 }
 
 .start-button:hover {
-  background: #45a049;
+  transform: scale(1.05);
+  animation: buttonPulse 1.5s infinite;
+}
+
+/* Difficulty-specific styles for start button */
+.start-button.easy {
+  background: #4CAF50;
+  color: white;
+  text-shadow: 0 2px 4px rgba(76, 175, 80, 0.5),
+               0 0 10px rgba(76, 175, 80, 0.3);
+}
+
+.start-button.medium {
+  background: #2196F3;
+  color: white;
+  text-shadow: 0 2px 4px rgba(33, 150, 243, 0.5),
+               0 0 10px rgba(33, 150, 243, 0.3);
+}
+
+.start-button.hard {
+  background: #FF9800;
+  color: white;
+  text-shadow: 0 2px 4px rgba(255, 152, 0, 0.5),
+               0 0 10px rgba(255, 152, 0, 0.3);
+}
+
+.start-button.impossible {
+  background: linear-gradient(45deg, #ff0000, #ff00ff);
+  color: white;
+  text-shadow: 0 0 10px rgba(255, 0, 255, 0.5),
+               0 0 20px rgba(255, 0, 255, 0.3),
+               0 0 30px rgba(255, 0, 255, 0.2);
+  animation: impossibleGlow 1.5s infinite alternate;
+}
+
+/* Button pulse animation */
+@keyframes buttonPulse {
+  0% { transform: scale(1.05); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1.05); }
+}
+
+/* Special glow effect for impossible mode */
+@keyframes impossibleGlow {
+  from {
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.5),
+                 0 0 20px rgba(255, 0, 255, 0.3),
+                 0 0 30px rgba(255, 0, 255, 0.2);
+  }
+  to {
+    text-shadow: 0 0 20px rgba(255, 0, 255, 0.6),
+                 0 0 30px rgba(255, 0, 255, 0.4),
+                 0 0 40px rgba(255, 0, 255, 0.3);
+  }
 }
 
 .game-over {
@@ -138,13 +208,3 @@
 .reset-button:hover {
   background: #1976D2;
 }
-
-.difficulty-choice button[data-difficulty="impossible"] {
-  background: linear-gradient(45deg, #ff0000, #ff00ff);
-  color: white;
-  text-shadow: 0 0 5px rgba(0,0,0,0.5);
-}
-
-.difficulty-choice button[data-difficulty="impossible"]:hover {
-  background: linear-gradient(45deg, #ff00ff, #ff0000);
-} 

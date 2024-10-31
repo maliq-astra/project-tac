@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import './TicTacToe.css';
 import DifficultyPicker from './DifficultyPicker';
-import { Player, Board, GameStatus, Difficulty, difficultyThemes } from '../types/game';
+import { 
+  Player, 
+  Board, 
+  GameStatus, 
+  Difficulty, 
+  difficultyThemes 
+} from '../types/game';
 import { checkWinner, getComputerMove } from '../utils/gameLogic';
 
 const TicTacToe: React.FC = () => {
@@ -10,6 +16,7 @@ const TicTacToe: React.FC = () => {
   const [difficulty, setDifficulty] = useState<Difficulty>('easy');
   const [hoveredCell, setHoveredCell] = useState<number | null>(null);
   const [gameStatus, setGameStatus] = useState<GameStatus>('selecting');
+  const [winner, setWinner] = useState<Player | 'draw' | null>(null);
 
   const handleCellClick = (index: number): void => {
     if (board[index] || gameStatus !== 'playing') return;
@@ -18,10 +25,12 @@ const TicTacToe: React.FC = () => {
     newBoard[index] = playerSymbol;
     setBoard(newBoard);
     
-    const winner = checkWinner(newBoard);
-    if (winner) {
+    const result = checkWinner(newBoard);
+    if (result) {
+      setWinner(playerSymbol);
       setTimeout(() => setGameStatus('ended'), 500);
     } else if (!newBoard.includes(null)) {
+      setWinner('draw');
       setTimeout(() => setGameStatus('ended'), 500);
     } else {
       setTimeout(() => makeComputerMove(newBoard), 500);
@@ -36,10 +45,12 @@ const TicTacToe: React.FC = () => {
     newBoard[move] = computerSymbol;
     setBoard(newBoard);
 
-    const winner = checkWinner(newBoard);
-    if (winner) {
+    const result = checkWinner(newBoard);
+    if (result) {
+      setWinner(computerSymbol);
       setTimeout(() => setGameStatus('ended'), 500);
     } else if (!newBoard.includes(null)) {
+      setWinner('draw');
       setTimeout(() => setGameStatus('ended'), 500);
     }
   };
@@ -47,6 +58,7 @@ const TicTacToe: React.FC = () => {
   const resetGame = (): void => {
     setBoard(Array(9).fill(null));
     setGameStatus('selecting');
+    setWinner(null);
   };
 
   // Add theme styles to the container
@@ -105,7 +117,12 @@ const TicTacToe: React.FC = () => {
           
           <button 
             className={`start-button ${difficulty}`}
-            onClick={() => setGameStatus('playing')}
+            onClick={() => {
+              setGameStatus('playing');
+              if (playerSymbol === 'O') {
+                setTimeout(() => makeComputerMove(Array(9).fill(null)), 500);
+              }
+            }}
           >
             Start Game
           </button>
@@ -130,8 +147,18 @@ const TicTacToe: React.FC = () => {
 
       {gameStatus === 'ended' && (
         <div className="game-over">
-          <h2>Game Over</h2>
-          <button className="reset-button" onClick={resetGame}>
+          <h2>
+            {winner === 'draw' 
+              ? "It's a Draw!" 
+              : winner === playerSymbol 
+                ? `${winner} Wins!`
+                : `${winner} Wins! 🤖`}
+          </h2>
+          <button 
+            className="reset-button" 
+            onClick={resetGame}
+            style={{ backgroundColor: theme.primary }}
+          >
             Play Again
           </button>
         </div>

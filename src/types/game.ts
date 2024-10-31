@@ -31,3 +31,13 @@ export const difficultyThemes: Record<Difficulty, ThemeColors> = {
     shadow: 'rgba(233, 30, 99, 0.2)',
   },
 };
+
+export type WinningLine = {
+  type: 'horizontal' | 'vertical' | 'diagonal';
+  index: number;
+} | null;
+
+export type WinResult = {
+  winner: Player;
+  line: WinningLine;
+} | null;

@@ -15,10 +15,13 @@ body {
 
 .game-board {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 100px);
   gap: 10px;
   margin: 2rem;
   perspective: 1000px;
+  position: relative;
+  width: 320px;
+  height: 320px;
 }
 
 .cell {

@@ -231,3 +231,51 @@ body {
 .cell:hover .symbol {
   transform: translateZ(20px);
 }
+
+.winning-line {
+  position: absolute;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.winning-line.horizontal {
+  height: 8px;
+  width: 98%;
+  left: 1%;
+  border-radius: 5px;
+}
+
+.winning-line.vertical {
+  width: 8px;
+  height: 98%;
+  top: 1%;
+  border-radius: 5px;
+}
+
+.winning-line.diagonal {
+  width: 8px;
+  height: 130%;
+  top: -15%;
+  left: 50%;
+  border-radius: 5px;
+}
+
+/* Position horizontal lines */
+.winning-line.horizontal.line-0 { top: calc(16.67% - 4px); }
+.winning-line.horizontal.line-1 { top: calc(50% - 4px); }
+.winning-line.horizontal.line-2 { top: calc(83.33% - 4px); }
+
+/* Position vertical lines */
+.winning-line.vertical.line-0 { left: calc(16.67% - 4px); }
+.winning-line.vertical.line-1 { left: calc(50% - 4px); }
+.winning-line.vertical.line-2 { left: calc(83.33% - 4px); }
+
+/* Position diagonal lines */
+.winning-line.diagonal.line-0 {
+  transform: translateX(-50%) rotate(-45deg);
+  transform-origin: center center;
+}
+.winning-line.diagonal.line-1 {
+  transform: translateX(-50%) rotate(45deg);
+  transform-origin: center center;
+}

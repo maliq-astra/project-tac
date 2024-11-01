@@ -10,7 +10,10 @@ body {
   padding: 2rem;
   min-height: 100vh;
   background-color: var(--theme-background);
+  color: var(--theme-text);
   transition: background-color 0.3s ease;
+  position: relative;
+  z-index: 2;
 }
 
 .game-board {
@@ -27,7 +30,7 @@ body {
 .cell {
   width: 100px;
   height: 100px;
-  background: #fff;
+  background: rgba(255, 255, 255, 1);
   border: none;
   display: flex;
   align-items: center;
@@ -64,7 +67,7 @@ body {
 
 .game-setup {
   text-align: center;
-  background: white;
+  background: rgba(255, 255, 255, 1);
   padding: 2rem;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -278,4 +281,111 @@ body {
 .winning-line.diagonal.line-1 {
   transform: translateX(-50%) rotate(45deg);
   transform-origin: center center;
+}
+
+/* Add these new animations */
+@keyframes symbolFall {
+  from {
+    transform: translateY(-100vh) rotate(0deg);
+  }
+  to {
+    transform: translateY(100vh) rotate(360deg);
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Add background symbols container */
+.falling-symbols {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+  -webkit-transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
+}
+
+.symbol-column {
+  position: absolute;
+  top: 0;
+  width: 10%;
+  height: 100%;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+}
+
+.falling-symbol {
+  position: absolute;
+  top: -50px;
+  width: 100%;
+  text-align: center;
+  opacity: 0.2;
+  font-family: 'Finger Paint', cursive;
+  font-size: 3rem;
+  font-weight: bold;
+  animation: simpleFall linear infinite;
+}
+
+@keyframes simpleFall {
+  from {
+    transform: translateY(-100%) rotate(0deg);
+  }
+  to {
+    transform: translateY(100vh) rotate(360deg);
+  }
+}
+
+/* Remove the game-board.draw .cell animation and add these instead */
+.game-board.draw .cell:nth-child(1) { animation: shake 0.5s ease-in-out infinite; animation-iteration-count: 20; animation-delay: 0.0s; }
+.game-board.draw .cell:nth-child(2) { animation: shake 0.5s ease-in-out infinite; animation-iteration-count: 20; animation-delay: 0.1s; }
+.game-board.draw .cell:nth-child(3) { animation: shake 0.5s ease-in-out infinite; animation-iteration-count: 20; animation-delay: 0.2s; }
+.game-board.draw .cell:nth-child(4) { animation: shake 0.5s ease-in-out infinite; animation-iteration-count: 20; animation-delay: 0.15s; }
+.game-board.draw .cell:nth-child(5) { animation: shake 0.5s ease-in-out infinite; animation-iteration-count: 20; animation-delay: 0.25s; }
+.game-board.draw .cell:nth-child(6) { animation: shake 0.5s ease-in-out infinite; animation-iteration-count: 20; animation-delay: 0.1s; }
+.game-board.draw .cell:nth-child(7) { animation: shake 0.5s ease-in-out infinite; animation-iteration-count: 20; animation-delay: 0.2s; }
+.game-board.draw .cell:nth-child(8) { animation: shake 0.5s ease-in-out infinite; animation-iteration-count: 20; animation-delay: 0.05s; }
+.game-board.draw .cell:nth-child(9) { animation: shake 0.5s ease-in-out infinite; animation-iteration-count: 20; animation-delay: 0.15s; }
+
+.falling-symbols-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.falling-symbols {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.falling-symbol {
+  position: absolute;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  from {
+    transform: translateY(0) rotate(0deg);
+  }
+  to {
+    transform: translateY(100vh) rotate(360deg);
+  }
 }

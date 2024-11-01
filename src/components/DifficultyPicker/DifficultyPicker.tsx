@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './DifficultyPicker.css';
-import { Difficulty } from '../types/game';
-import { difficultyThemes } from '../types/game';
+import { Difficulty } from '../../types/game';
+import { difficultyThemes } from '../../types/game';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 

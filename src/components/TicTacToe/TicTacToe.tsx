@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import './TicTacToe.css';
-import DifficultyPicker from './DifficultyPicker';
+import DifficultyPicker from '../DifficultyPicker/DifficultyPicker';
 import { 
   Player, 
   Board, 
@@ -8,8 +8,9 @@ import {
   Difficulty, 
   difficultyThemes,
   WinningLine 
-} from '../types/game';
-import { checkWinner, getComputerMove } from '../utils/gameLogic';
+} from '../../types/game';
+import { checkWinner, getComputerMove } from '../../utils/gameLogic';
+import { useTheme } from '../../context/ThemeContext';
 
 const TicTacToe: React.FC = () => {
   const [board, setBoard] = useState<Board>(Array(9).fill(null));
@@ -20,6 +21,7 @@ const TicTacToe: React.FC = () => {
   const [winner, setWinner] = useState<Player | 'draw' | null>(null);
   const [winningLine, setWinningLine] = useState<WinningLine>(null);
   const [isPlayerTurn, setIsPlayerTurn] = useState<boolean>(true);
+  const { theme, setDifficultyTheme } = useTheme();
 
   const handleCellClick = (index: number): void => {
     if (board[index] || !isPlayerTurn || gameStatus !== 'playing') return;
@@ -74,11 +76,9 @@ const TicTacToe: React.FC = () => {
 
   // Add theme styles to the container
   const containerStyle = {
-    backgroundColor: difficultyThemes[difficulty].background,
+    backgroundColor: theme.background,
     transition: 'background-color 0.3s ease',
   };
-
-  const theme = difficultyThemes[difficulty];
 
   const startButtonStyle = {
     backgroundColor: theme.primary,
@@ -104,6 +104,46 @@ const TicTacToe: React.FC = () => {
     return '';
   };
 
+  const renderFallingSymbols = useMemo(() => {
+    if (!winner || winner === 'draw') return null;
+    
+    return (
+      <div className="falling-symbols-container">
+        <div className="falling-symbols">
+          {[...Array(10)].map((_, i) => (
+            <div
+              key={i}
+              className="symbol-column"
+              style={{
+                left: `${i * 10}%`,
+              }}
+            >
+              {[...Array(5)].map((_, j) => (
+                <div
+                  key={j}
+                  className="falling-symbol"
+                  style={{
+                    animationDelay: `${Math.random() * 2}s`,
+                    animationDuration: `${2 + Math.random() * 2}s`,
+                    top: `-${50 + Math.random() * 100}px`,
+                    color: theme.primary,
+                  }}
+                >
+                  {winner}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }, [winner]);
+
+  const handleDifficultyChange = (newDifficulty: Difficulty) => {
+    setDifficulty(newDifficulty);
+    setDifficultyTheme(newDifficulty);
+  };
+
   return (
     <div className="game-container" style={containerStyle}>
       {gameStatus === 'selecting' && (
@@ -123,7 +163,7 @@ const TicTacToe: React.FC = () => {
           <h2>Select Difficulty</h2>
           <DifficultyPicker 
             difficulty={difficulty}
-            setDifficulty={setDifficulty}
+            setDifficulty={handleDifficultyChange}
           />
           
           <button 
@@ -142,24 +182,27 @@ const TicTacToe: React.FC = () => {
       )}
 
       {(gameStatus === 'playing' || gameStatus === 'ended') && (
-        <div className="game-board">
-          {winningLine && (
-            <div className={`winning-line ${winningLine.type} line-${winningLine.index}`} 
-                 style={{ backgroundColor: theme.primary }} 
-            />
-          )}
-          {board.map((cell, index) => (
-            <div
-              key={index}
-              className={`cell ${cell ? 'filled' : ''}`}
-              onMouseEnter={() => setHoveredCell(index)}
-              onMouseLeave={() => setHoveredCell(null)}
-              onClick={() => handleCellClick(index)}
-            >
-              {getCellContent(cell, index)}
-            </div>
-          ))}
-        </div>
+        <>
+          {renderFallingSymbols}
+          <div className={`game-board ${winner === 'draw' ? 'draw' : ''}`}>
+            {winningLine && (
+              <div className={`winning-line ${winningLine.type} line-${winningLine.index}`} 
+                   style={{ backgroundColor: theme.primary }} 
+              />
+            )}
+            {board.map((cell, index) => (
+              <div
+                key={index}
+                className={`cell ${cell ? 'filled' : ''}`}
+                onMouseEnter={() => setHoveredCell(index)}
+                onMouseLeave={() => setHoveredCell(null)}
+                onClick={() => handleCellClick(index)}
+              >
+                {getCellContent(cell, index)}
+              </div>
+            ))}
+          </div>
+        </>
       )}
 
       {gameStatus === 'ended' && (

@@ -1,11 +1,15 @@
 import React from 'react';
-import TicTacToe from './components/TicTacToe';
+import { ThemeProvider } from './context/ThemeContext';
+import TicTacToe from './components/TicTacToe/TicTacToe';
+import './App.css';
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <TicTacToe />
-    </div>
+    <ThemeProvider>
+      <div className="App">
+        <TicTacToe />
+      </div>
+    </ThemeProvider>
   );
 };
 

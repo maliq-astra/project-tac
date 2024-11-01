@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './DifficultyPicker.css';
 import { Difficulty } from '../../types/game';
 import { difficultyThemes } from '../../types/game';
@@ -14,6 +14,7 @@ const DifficultyPicker: React.FC<DifficultyPickerProps> = ({ difficulty, setDiff
   const difficulties: Difficulty[] = ['easy', 'medium', 'hard', 'impossible'];
   const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
   const [key, setKey] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const triggerAnimation = (direction: 'left' | 'right') => {
     setSlideDirection(null);
@@ -38,11 +39,17 @@ const DifficultyPicker: React.FC<DifficultyPickerProps> = ({ difficulty, setDiff
   };
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
+    const element = containerRef.current;
+    if (!element) return;
+    
+    element.addEventListener('keydown', handleKeyPress);
+    // Make the div focusable
+    element.tabIndex = 0;
+    
     return () => {
-      window.removeEventListener('keydown', handleKeyPress);
+      element.removeEventListener('keydown', handleKeyPress);
     };
-  }, [difficulty]); // Re-add event listener when difficulty changes
+  }, [difficulty]);
 
   const handlePrevClick = () => {
     triggerAnimation('left');
@@ -69,7 +76,10 @@ const DifficultyPicker: React.FC<DifficultyPickerProps> = ({ difficulty, setDiff
   };
 
   return (
-    <div className="difficulty-picker">
+    <div 
+      ref={containerRef}
+      className="difficulty-picker"
+    >
       <button 
         className="arrow-button left" 
         onClick={handlePrevClick}

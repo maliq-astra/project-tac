@@ -131,4 +131,9 @@
   0% { letter-spacing: -2px; }
   50% { letter-spacing: 2px; }
   100% { letter-spacing: normal; }
-} 
+}
+
+.difficulty-picker:focus {
+  outline: none; /* Remove default outline */
+  /* Add your own focus styling if desired */
+}

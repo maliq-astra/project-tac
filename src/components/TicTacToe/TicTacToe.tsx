@@ -6,17 +6,16 @@ import {
   Board, 
   GameStatus, 
   Difficulty, 
-  difficultyThemes,
   WinningLine 
 } from '../../types/game';
 import { checkWinner, getComputerMove } from '../../utils/gameLogic';
 import { useTheme } from '../../context/ThemeContext';
+import GameBoard from '../GameBoard/GameBoard';
 
 const TicTacToe: React.FC = () => {
   const [board, setBoard] = useState<Board>(Array(9).fill(null));
   const [playerSymbol, setPlayerSymbol] = useState<Player>('X');
   const [difficulty, setDifficulty] = useState<Difficulty>('easy');
-  const [hoveredCell, setHoveredCell] = useState<number | null>(null);
   const [gameStatus, setGameStatus] = useState<GameStatus>('selecting');
   const [winner, setWinner] = useState<Player | 'draw' | null>(null);
   const [winningLine, setWinningLine] = useState<WinningLine>(null);
@@ -80,11 +79,6 @@ const TicTacToe: React.FC = () => {
     transition: 'background-color 0.3s ease',
   };
 
-  const startButtonStyle = {
-    backgroundColor: theme.primary,
-    color: 'white',
-  };
-
   const symbolButtonStyle = (isSelected: boolean) => ({
     backgroundColor: isSelected ? theme.primary : 'white',
     color: isSelected ? 'white' : theme.primary,
@@ -94,15 +88,6 @@ const TicTacToe: React.FC = () => {
     transition: 'all 0.3s ease',
   });
 
-  const getCellContent = (cell: Player | null, index: number) => {
-    if (cell) {
-      return <span className={`symbol ${cell.toLowerCase()}`} style={{ color: theme.primary }}>{cell}</span>;
-    }
-    if (hoveredCell === index && gameStatus === 'playing') {
-      return <span className={`symbol ${playerSymbol.toLowerCase()} preview`}>{playerSymbol}</span>;
-    }
-    return '';
-  };
 
   const renderFallingSymbols = useMemo(() => {
     if (!winner || winner === 'draw') return null;
@@ -137,7 +122,7 @@ const TicTacToe: React.FC = () => {
         </div>
       </div>
     );
-  }, [winner]);
+  }, [winner, theme.primary]);
 
   const handleDifficultyChange = (newDifficulty: Difficulty) => {
     setDifficulty(newDifficulty);
@@ -184,24 +169,15 @@ const TicTacToe: React.FC = () => {
       {(gameStatus === 'playing' || gameStatus === 'ended') && (
         <>
           {renderFallingSymbols}
-          <div className={`game-board ${winner === 'draw' ? 'draw' : ''}`}>
-            {winningLine && (
-              <div className={`winning-line ${winningLine.type} line-${winningLine.index}`} 
-                   style={{ backgroundColor: theme.primary }} 
-              />
-            )}
-            {board.map((cell, index) => (
-              <div
-                key={index}
-                className={`cell ${cell ? 'filled' : ''}`}
-                onMouseEnter={() => setHoveredCell(index)}
-                onMouseLeave={() => setHoveredCell(null)}
-                onClick={() => handleCellClick(index)}
-              >
-                {getCellContent(cell, index)}
-              </div>
-            ))}
-          </div>
+          <GameBoard
+            board={board}
+            winningLine={winningLine}
+            isPlayerTurn={isPlayerTurn}
+            gameStatus={gameStatus}
+            playerSymbol={playerSymbol}
+            winner={winner}
+            onCellClick={handleCellClick}
+          />
         </>
       )}
 

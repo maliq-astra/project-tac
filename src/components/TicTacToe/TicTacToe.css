@@ -7,8 +7,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem;
+  justify-content: center;
   min-height: 100vh;
+  min-width: 100vw;
   background-color: var(--theme-background);
   color: var(--theme-text);
   transition: background-color 0.3s ease;
@@ -260,5 +261,26 @@ body {
   }
   to {
     transform: translateY(100vh) rotate(360deg);
+  }
+}
+
+@media only screen and (max-width: 390px) {
+  .game-container {
+    min-height: 150vh;
+    min-width: 150vw;
+  }
+}
+
+@media only screen and (max-height: 500px) {
+  .game-container {
+    min-height: 150vh;
+    min-width: 150vw;
+  }
+}
+
+@media only screen and (max-height: 350px) {
+  .game-container {
+    min-height: 200vh;
+    min-width: 200vw;
   }
 }

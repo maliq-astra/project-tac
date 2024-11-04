@@ -8,7 +8,8 @@ import {
   Difficulty, 
   WinningLine 
 } from '../../types/game';
-import { checkWinner, getComputerMove } from '../../utils/gameLogic';
+import { checkWinner } from '../../utils/gameHelpers';
+import { getComputerMove } from '../../utils/gameLogic';
 import { useTheme } from '../../context/ThemeContext';
 import GameBoard from '../GameBoard/GameBoard';
 

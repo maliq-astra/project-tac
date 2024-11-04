@@ -43,8 +43,8 @@ const DifficultyPicker: React.FC<DifficultyPickerProps> = ({ difficulty, setDiff
     if (!element) return;
     
     element.addEventListener('keydown', handleKeyPress);
-    // Make the div focusable
     element.tabIndex = 0;
+    element.focus();
     
     return () => {
       element.removeEventListener('keydown', handleKeyPress);

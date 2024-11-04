@@ -2,6 +2,7 @@ import React from 'react';
 import './GameBoard.css';
 import { Board, Player, WinningLine } from '../../types/game';
 import { useTheme } from '../../context/ThemeContext';
+import Cell from '../Cell/Cell';
 
 interface GameBoardProps {
   board: Board;
@@ -22,18 +23,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
   winner,
   onCellClick,
 }) => {
-  const [hoveredCell, setHoveredCell] = React.useState<number | null>(null);
   const { theme } = useTheme();
-
-  const getCellContent = (cell: Player | null, index: number) => {
-    if (cell) {
-      return <span className={`symbol ${cell.toLowerCase()}`} style={{ color: theme.primary }}>{cell}</span>;
-    }
-    if (hoveredCell === index && gameStatus === 'playing' && isPlayerTurn) {
-      return <span className={`symbol ${playerSymbol.toLowerCase()} preview`}>{playerSymbol}</span>;
-    }
-    return '';
-  };
 
   return (
     <div className={`game-board ${winner === 'draw' ? 'draw' : ''}`}>
@@ -44,15 +34,15 @@ const GameBoard: React.FC<GameBoardProps> = ({
         />
       )}
       {board.map((cell, index) => (
-        <div
+        <Cell
           key={index}
-          className={`cell ${cell ? 'filled' : ''}`}
-          onMouseEnter={() => setHoveredCell(index)}
-          onMouseLeave={() => setHoveredCell(null)}
-          onClick={() => onCellClick(index)}
-        >
-          {getCellContent(cell, index)}
-        </div>
+          index={index}
+          cell={cell}
+          isPlayerTurn={isPlayerTurn}
+          gameStatus={gameStatus}
+          playerSymbol={playerSymbol}
+          onCellClick={onCellClick}
+        />
       ))}
     </div>
   );

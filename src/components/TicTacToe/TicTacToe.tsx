@@ -2,93 +2,48 @@ import React, { useState, useMemo } from 'react';
 import './TicTacToe.css';
 import DifficultyPicker from '../DifficultyPicker/DifficultyPicker';
 import { 
-  Player, 
-  Board, 
-  GameStatus, 
   Difficulty, 
-  WinningLine 
 } from '../../types/game';
-import { checkWinner } from '../../utils/gameHelpers';
-import { getComputerMove } from '../../utils/gameLogic';
 import { useTheme } from '../../context/ThemeContext';
 import GameBoard from '../GameBoard/GameBoard';
+import { useGameState } from '../../hooks/useGameState';
+import { useGameLogic } from '../../hooks/useGameLogic';
+import { useGameStyles } from '../../hooks/useGameStyles';
 
 const TicTacToe: React.FC = () => {
-  const [board, setBoard] = useState<Board>(Array(9).fill(null));
-  const [playerSymbol, setPlayerSymbol] = useState<Player>('X');
-  const [difficulty, setDifficulty] = useState<Difficulty>('easy');
-  const [gameStatus, setGameStatus] = useState<GameStatus>('selecting');
-  const [winner, setWinner] = useState<Player | 'draw' | null>(null);
-  const [winningLine, setWinningLine] = useState<WinningLine>(null);
-  const [isPlayerTurn, setIsPlayerTurn] = useState<boolean>(true);
   const { theme, setDifficultyTheme } = useTheme();
+  const [difficulty, setDifficulty] = useState<Difficulty>('easy');
+  
+  const {
+    board,
+    setBoard,
+    playerSymbol,
+    setPlayerSymbol,
+    gameStatus,
+    setGameStatus,
+    winner,
+    setWinner,
+    winningLine,
+    setWinningLine,
+    isPlayerTurn,
+    setIsPlayerTurn,
+    resetGame,
+  } = useGameState();
 
-  const handleCellClick = (index: number): void => {
-    if (board[index] || !isPlayerTurn || gameStatus !== 'playing') return;
+  const { handleCellClick, makeComputerMove } = useGameLogic(
+    board,
+    setBoard,
+    playerSymbol,
+    setWinner,
+    setWinningLine,
+    setGameStatus,
+    setIsPlayerTurn,
+    isPlayerTurn,
+    difficulty,
+    gameStatus
+  );
 
-    const newBoard = [...board];
-    newBoard[index] = playerSymbol;
-    setBoard(newBoard);
-    setIsPlayerTurn(false);
-    
-    const result = checkWinner(newBoard);
-    if (result) {
-      setWinner(playerSymbol);
-      setWinningLine(result.line);
-      setGameStatus('ended');
-    } else if (!newBoard.includes(null)) {
-      setWinner('draw');
-      setGameStatus('ended');
-    } else {
-      setTimeout(() => makeComputerMove(newBoard), 500);
-    }
-  };
-
-  const makeComputerMove = (currentBoard: Board): void => {
-    const computerSymbol: Player = playerSymbol === 'X' ? 'O' : 'X';
-    const move = getComputerMove(currentBoard, computerSymbol, difficulty);
-
-    const newBoard = [...currentBoard];
-    newBoard[move] = computerSymbol;
-    setBoard(newBoard);
-    setIsPlayerTurn(true);
-
-    const result = checkWinner(newBoard);
-    if (result) {
-      setWinner(computerSymbol);
-      setWinningLine(result.line);
-      setGameStatus('ended');
-      setIsPlayerTurn(false);
-    } else if (!newBoard.includes(null)) {
-      setWinner('draw');
-      setGameStatus('ended');
-      setIsPlayerTurn(false);
-    }
-  };
-
-  const resetGame = (): void => {
-    setBoard(Array(9).fill(null));
-    setGameStatus('selecting');
-    setWinner(null);
-    setWinningLine(null);
-    setIsPlayerTurn(true);
-  };
-
-  // Add theme styles to the container
-  const containerStyle = {
-    backgroundColor: theme.background,
-    transition: 'background-color 0.3s ease',
-  };
-
-  const symbolButtonStyle = (isSelected: boolean) => ({
-    backgroundColor: isSelected ? theme.primary : 'white',
-    color: isSelected ? 'white' : theme.primary,
-    borderColor: theme.primary,
-    textShadow: isSelected ? '0 2px 4px rgba(0,0,0,0.2)' : 'none',
-    transform: isSelected ? 'translateY(-2px)' : 'none',
-    transition: 'all 0.3s ease',
-  });
-
+  const { containerStyle, symbolButtonStyle } = useGameStyles(theme);
 
   const renderFallingSymbols = useMemo(() => {
     if (!winner || winner === 'draw') return null;

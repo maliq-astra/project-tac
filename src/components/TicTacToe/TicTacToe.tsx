@@ -9,6 +9,7 @@ import GameBoard from '../GameBoard/GameBoard';
 import { useGameState } from '../../hooks/useGameState';
 import { useGameLogic } from '../../hooks/useGameLogic';
 import { useGameStyles } from '../../hooks/useGameStyles';
+import FallingSymbols from '../FallingSymbols/FallingSymbols';
 
 const TicTacToe: React.FC = () => {
   const { theme, setDifficultyTheme } = useTheme();
@@ -44,41 +45,6 @@ const TicTacToe: React.FC = () => {
   );
 
   const { containerStyle, symbolButtonStyle } = useGameStyles(theme);
-
-  const renderFallingSymbols = useMemo(() => {
-    if (!winner || winner === 'draw') return null;
-    
-    return (
-      <div className="falling-symbols-container">
-        <div className="falling-symbols">
-          {[...Array(10)].map((_, i) => (
-            <div
-              key={i}
-              className="symbol-column"
-              style={{
-                left: `${i * 10}%`,
-              }}
-            >
-              {[...Array(5)].map((_, j) => (
-                <div
-                  key={j}
-                  className="falling-symbol"
-                  style={{
-                    animationDelay: `${Math.random() * 2}s`,
-                    animationDuration: `${2 + Math.random() * 2}s`,
-                    top: `-${50 + Math.random() * 100}px`,
-                    color: theme.primary,
-                  }}
-                >
-                  {winner}
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }, [winner, theme.primary]);
 
   const handleDifficultyChange = (newDifficulty: Difficulty) => {
     setDifficulty(newDifficulty);
@@ -124,7 +90,7 @@ const TicTacToe: React.FC = () => {
 
       {(gameStatus === 'playing' || gameStatus === 'ended') && (
         <>
-          {renderFallingSymbols}
+          <FallingSymbols winner={winner} theme={theme} />
           <GameBoard
             board={board}
             winningLine={winningLine}

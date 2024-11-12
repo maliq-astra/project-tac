@@ -1,5 +1,6 @@
 import React from 'react';
 import { Theme } from '../../types/theme';
+import './FallingSymbols.css'
 
 interface FallingSymbolsProps {
   winner: string | null;

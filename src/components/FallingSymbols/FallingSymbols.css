@@ -1,0 +1,30 @@
+.falling-symbols-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+  }
+  
+  .falling-symbol {
+    position: absolute;
+    top: -50px;
+    width: 100%;
+    text-align: center;
+    opacity: 0.4;
+    font-family: 'Finger Paint', cursive;
+    font-size: 3rem;
+    font-weight: bold;
+    animation: fall linear infinite;
+  }
+  
+  @keyframes fall {
+    from {
+      transform: translateY(0) rotate(0deg);
+    }
+    to {
+      transform: translateY(100vh) rotate(360deg);
+    }
+  }
